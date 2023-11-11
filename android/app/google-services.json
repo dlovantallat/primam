@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "895574006395",
+    "project_id": "primam-1459e",
+    "storage_bucket": "primam-1459e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:895574006395:android:c95fc3a4a9e8c9625ea0de",
+        "android_client_info": {
+          "package_name": "com.example.primam"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBoHwR4fyqQUM77f2V4wT0jaewtARomKGY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
