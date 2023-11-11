@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:primam/UI/currency_page.dart';
 import 'package:primam/UI/detail_page.dart';
 import 'package:primam/UI/widget/weather_item.dart';
+import 'package:primam/helper/navigation_helper.dart';
 import 'dart:convert';
 import 'dart:ui';
 import '../helper/constants.dart';
@@ -143,7 +145,11 @@ class _WeatherPageState extends State<WeatherPage> {
                     children: [
                       // dark mode icon
                       IconButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          router.goTo(
+                              targetScreen: CurrencyConverter(),
+                              context: context);
+                        },
                         icon: const Icon(
                           Icons.currency_exchange,
                           color: Colors.white,
