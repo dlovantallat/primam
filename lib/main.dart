@@ -1,14 +1,37 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:primam/UI/signin_page.dart';
+import 'package:primam/UI/signup_page.dart';
 import 'package:primam/UI/weather_page.dart';
 import 'package:primam/helper/navigation_helper.dart';
 
-void main() {
-  runApp(const MyApp());
+import 'firebase_options.dart';
+
+late final FirebaseAuth auth;
+
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  final fire = await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+
+  auth = FirebaseAuth.instanceFor(app: fire);
+
+  bool isLogin = false;
+  if (auth.currentUser != null) {
+    print("object: ${auth.currentUser!.email}");
+    isLogin = true;
+  }
+  runApp(MyApp(
+    isLogin: isLogin,
+  ));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final bool isLogin;
+
+  const MyApp({super.key, required this.isLogin});
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +56,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const MyHomePage(),
+      home: !isLogin ? const MyHomePage() : const WeatherPage(),
     );
   }
 }
@@ -56,15 +79,30 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            ElevatedButton(
-              onPressed: () {
-                router.goTo(targetScreen: SignInPage(), context: context);
-              },
-              child: const Text("Sign In"),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                ElevatedButton(
+                  onPressed: () {
+                    router.goTo(targetScreen: SignInPage(), context: context);
+                  },
+                  child: const Text("Sign In"),
+                ),
+                SizedBox(
+                  width: 16,
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    router.goTo(targetScreen: SignUpPage(), context: context);
+                  },
+                  child: const Text("Sign Up"),
+                ),
+              ],
             ),
             TextButton(
               onPressed: () {
-                router.goTo(targetScreen: WeatherPage(), context: context);
+                router.goTo(
+                    targetScreen: WeatherPage(), context: context, clean: true);
               },
               child: const Text("Skip"),
             ),

@@ -1,19 +1,18 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:primam/UI/reset_password_page.dart';
-import 'package:primam/UI/weather_page.dart';
+import 'package:primam/helper/navigation_helper.dart';
 
 import '../helper/fun_helper.dart';
-import '../helper/navigation_helper.dart';
 import '../main.dart';
 
-class SignInPage extends StatefulWidget {
-  const SignInPage({super.key});
+class SignUpPage extends StatefulWidget {
+  const SignUpPage({super.key});
 
   @override
-  State<SignInPage> createState() => _SignInPageState();
+  State<SignUpPage> createState() => _SignUpPageState();
 }
 
-class _SignInPageState extends State<SignInPage> {
+class _SignUpPageState extends State<SignUpPage> {
   String password = "";
   String email = "";
 
@@ -21,7 +20,7 @@ class _SignInPageState extends State<SignInPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Sign In"),
+        title: Text("Sign Up"),
       ),
       body: Center(
         child: Column(
@@ -91,36 +90,31 @@ class _SignInPageState extends State<SignInPage> {
               onPressed: email.isNotEmpty && password.isNotEmpty
                   ? () async {
                       try {
-                        await auth.signInWithEmailAndPassword(
+                        await auth.createUserWithEmailAndPassword(
                           email: email,
                           password: password,
                         );
 
-                        router.goTo(
-                            targetScreen: WeatherPage(),
-                            context: context,
-                            clean: true);
+                        router.goBack(context: context);
                       } catch (e) {
-                        print(e);
-                        if (e
-                            .toString()
-                            .contains("INVALID_LOGIN_CREDENTIALS")) {
+                        if (e.toString().contains("weak-password")) {
                           setSnackBar(
-                              context, "the email or password is wrong");
-                        } else {
-                          setSnackBar(context, "something went wrong");
+                              context, "The password provided is too weak.");
+                        } else if (e
+                            .toString()
+                            .contains("email-already-in-use")) {
+                          setSnackBar(context,
+                              "The account already exists for that email.");
+                        } else if (e
+                            .toString()
+                            .contains("The email address is badly formatted")) {
+                          setSnackBar(
+                              context, "The email address is badly formatted");
                         }
                       }
                     }
                   : null,
-              child: Text("SignIn"),
-            ),
-            TextButton(
-              onPressed: () {
-                router.goTo(
-                    targetScreen: ResetPasswordPage(), context: context);
-              },
-              child: Text("Reset Password"),
+              child: Text("SignUp"),
             ),
           ],
         ),

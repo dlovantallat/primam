@@ -4,6 +4,7 @@ import 'package:primam/UI/currency_page.dart';
 import 'package:primam/UI/detail_page.dart';
 import 'package:primam/UI/widget/weather_item.dart';
 import 'package:primam/helper/navigation_helper.dart';
+import 'package:primam/main.dart';
 import 'dart:convert';
 import 'dart:ui';
 import '../helper/constants.dart';
@@ -25,7 +26,7 @@ class _WeatherPageState extends State<WeatherPage> {
 
   static String API_KEY = "c5d85125594747afa7f203239231111";
 
-  String location = 'Mumbai';
+  String location = 'Erbil';
   String weatherIcon = 'heavycloudy.png';
   int temperature = 0;
   int windSpeed = 0;
@@ -144,17 +145,18 @@ class _WeatherPageState extends State<WeatherPage> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       // dark mode icon
-                      IconButton(
-                        onPressed: () {
-                          router.goTo(
-                              targetScreen: CurrencyConverter(),
-                              context: context);
-                        },
-                        icon: const Icon(
-                          Icons.currency_exchange,
-                          color: Colors.white,
+                      if (auth.currentUser != null)
+                        IconButton(
+                          onPressed: () {
+                            router.goTo(
+                                targetScreen: CurrencyConverter(),
+                                context: context);
+                          },
+                          icon: const Icon(
+                            Icons.currency_exchange,
+                            color: Colors.white,
+                          ),
                         ),
-                      ),
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
@@ -222,7 +224,7 @@ class _WeatherPageState extends State<WeatherPage> {
                                                       ),
                                                     ),
                                                     hintText:
-                                                        'Search city e.g. Mumbai',
+                                                        'Search city e.g. Erbil',
                                                     focusedBorder:
                                                         OutlineInputBorder(
                                                       borderSide: BorderSide(
