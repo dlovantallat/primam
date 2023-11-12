@@ -23,14 +23,13 @@ class _CurrencyConverterState extends State<CurrencyConverter> {
   }
 
   Future<String> _loadCurrencies() async {
-    String uri = "http://api.exchangeratesapi.io/latest?access_key=5c290a42f69f7d97fcc0aff23f8fb526";
+    String uri =
+        "https://api.fastforex.io/fetch-all?api_key=d327bff0d1-722740d85a-s40nvh";
     var response =
         await http.get(Uri.parse(uri), headers: {"Accept": "application/json"});
 
-
-
     var responseBody = json.decode(response.body);
-    Map curMap = responseBody['rates'];
+    Map curMap = responseBody['results'];
     currencies = curMap.keys.cast<String>().toList();
     setState(() {});
     print("ddd $currencies");
@@ -38,19 +37,15 @@ class _CurrencyConverterState extends State<CurrencyConverter> {
   }
 
   Future<String> _doConversion() async {
-
     String uri =
-        "http://api.exchangeratesapi.io/latest?base=$fromCurrency&symbols=$toCurrency&access_key=5c290a42f69f7d97fcc0aff23f8fb526";
-
+        "https://api.fastforex.io/convert?from=$fromCurrency&to=$toCurrency&amount=${fromTextController.text}&api_key=d327bff0d1-722740d85a-s40nvh";
 
     print(uri);
     var response =
         await http.get(Uri.parse(uri), headers: {"Accept": "application/json"});
     var responseBody = json.decode(response.body);
     setState(() {
-      result = (double.parse(fromTextController.text) *
-              (responseBody["rates"][toCurrency]))
-          .toString();
+      result = "${responseBody['result']['USD']}";
     });
     print(result);
     return "Success";
@@ -120,8 +115,8 @@ class _CurrencyConverterState extends State<CurrencyConverter> {
   Widget _buildDropDownButton(String currencyCategory) {
     return DropdownButton(
       value: currencyCategory,
-      items: currencies
-          !.map((String value) => DropdownMenuItem(
+      items: currencies!
+          .map((String value) => DropdownMenuItem(
                 value: value,
                 child: Row(
                   children: <Widget>[
